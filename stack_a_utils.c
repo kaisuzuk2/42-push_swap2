@@ -149,3 +149,27 @@ t_stack *stack_a_utils(int *arr, int size)
 	}
 	return (stk_a);
 }
+
+#include <stdio.h>
+int main(void)
+{
+	int a[] = {1, 2, 3, 4, 5};
+	t_stack *res = stack_a_utils(a, 5);
+	t_stack *b_stack = (t_stack *)malloc(sizeof(t_stack));
+	b_stack->rank = -1;
+	b_stack->next = b_stack;
+	b_stack->prev = b_stack;
+	push(b_stack, res);
+	push(b_stack, res);
+	push(b_stack, res);
+	rotate(b_stack);
+	push(b_stack, res);
+	push(b_stack, res);
+	push(b_stack, res);
+	t_stack *cur = b_stack->next;
+	while (cur != b_stack)
+	{
+		printf("%d ", cur->rank);
+		cur = cur->next;
+	}
+}
