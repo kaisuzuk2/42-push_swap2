@@ -10,6 +10,16 @@ typedef struct s_stack
 	struct s_stack	*next;
 }					t_stack;
 
+typedef struct s_cost 
+{
+	int rr;
+	int rrr;
+	int ra;
+	int rb;
+	int rra;
+	int rrb;
+} t_cost;
+
 void				rotate(t_stack *stk);
 void				reverse_rotate(t_stack *stk);
 void				swap(t_stack *stk);
