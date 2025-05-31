@@ -25,4 +25,7 @@ void				reverse_rotate(t_stack *stk);
 void				swap(t_stack *stk);
 void push(t_stack *to_stack, t_stack *from_stack);
 
+t_stack *stack_a_utils(int *arr, int size);
+t_cost *cost_utils(t_stack *stk_a, t_stack *stk_b);
+
 #endif

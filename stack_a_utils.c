@@ -71,7 +71,7 @@ static void compression(int *rank_arr, int *arr, int *sorted_arr, int size)
 		j = 0;
 		while (arr[i] != sorted_arr[j])
 			j++;
-		rank_arr[i] = j;
+		rank_arr[i] = (j + 1);
 		i++;
 	}
 }
@@ -150,23 +150,23 @@ t_stack *stack_a_utils(int *arr, int size)
 	return (stk_a);
 }
 
-#include <stdio.h>
-int main(void)
-{
-	int a[] = {5, 4 ,3 ,2 ,1 };
-	t_stack *a_stack = stack_a_utils(a, 5);
-	t_stack *b_stack = (t_stack *)malloc(sizeof(t_stack));
-	b_stack->rank = -1;
-	b_stack->next = b_stack;
-	b_stack->prev = b_stack;
+// #include <stdio.h>
+// int main(void)
+// {
+// 	int a[] = {5, 4 ,3 ,2 ,1 };
+// 	t_stack *a_stack = stack_a_utils(a, 5);
+// 	t_stack *b_stack = (t_stack *)malloc(sizeof(t_stack));
+// 	b_stack->rank = -1;
+// 	b_stack->next = b_stack;
+// 	b_stack->prev = b_stack;
 	
-	push(b_stack, a_stack);
-	push(b_stack, a_stack);
+// 	push(b_stack, a_stack);
+// 	push(b_stack, a_stack);
 
-	t_stack *cur = b_stack->next;
-	while (cur != b_stack)
-	{
-		printf("%d ", cur->rank);
-		cur = cur->next;
-	}
-}
+// 	t_stack *cur = b_stack->next;
+// 	while (cur != b_stack)
+// 	{
+// 		printf("%d ", cur->rank);
+// 		cur = cur->next;
+// 	}
+// }

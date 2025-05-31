@@ -1,5 +1,10 @@
 #include "push_swap.h"
 
+
+
+#include <stdio.h>
+
+
 static void cost_init(t_cost *cst)
 {
 	cst->rr = 0;
@@ -15,7 +20,7 @@ static int get_total_cost(t_cost *cst)
 	return (cst->rr + cst->rrr + cst->ra + cst->rb + cst->rra + cst->rrb);
 }
 
-static int get_stack_size(t_stack *stk)
+int get_stack_size(t_stack *stk)
 {
 	int count;
 	t_stack *cur;
@@ -32,31 +37,68 @@ static int get_stack_size(t_stack *stk)
 
 static void calc_b_cost(t_cost *cst, t_stack *stk_b, int rank)
 {
-	int i;
 	t_stack *cur;
-	t_stack *top;
-	t_stack *tail;
+	t_stack *max;
+	t_stack *min;
+	int i;
 
-	i = 0;
-	cur = stk_b->next;
-	top = cur;
-	tail = stk_b->prev;
-	if (cur == stk_b)
+	if (stk_b->next == stk_b)
 		return ;
-	if (top->rank < rank)
+	cur = stk_b->next;
+	
+	max = cur;
+	min = cur;
+	while (cur != stk_b)
 	{
-		cst->rrb = get_stack_size(stk_b);
+		if (cur->rank < min->rank)
+			min = cur;
+		if (cur->rank > max->rank)	
+			max = cur;
+		cur = cur->next;
+	}
+	cur = stk_b->next;
+	i = 0;
+	if (rank > max->rank)
+	{
+		while (cur != stk_b)
+		{
+			if (cur->rank == max->rank)
+			{
+				cst->rb = i;
+				cst->rrb = get_stack_size(stk_b) - i;
+				return ;
+			}
+			i++;
+			cur = cur->next;
+		}
 		return ;
 	}
+	i = 1;
+	if (rank < min->rank)
+	{ 
+		while (cur != stk_b)
+		{
+			if (cur->rank == min->rank)
+			{
+				cst->rb = i;
+				cst->rrb = get_stack_size(stk_b) - i;
+				return ;
+			}
+			i++;
+			cur = cur->next;
+		}
+		return ;
+	}
+	i = 1;
 	while (cur != stk_b)
 	{
 		if (cur->rank > rank && cur->next->rank < rank)
 			break;
-		i++;
 		cur = cur->next;
+		i++;
 	}
-		cst->rb = i;
-		cst->rrb = get_stack_size(stk_b) - i;
+	cst->rb = i;
+	cst->rrb = get_stack_size(stk_b) - i;
 }
 
 static void optimization(t_cost *cst)
@@ -65,7 +107,7 @@ static void optimization(t_cost *cst)
 		(cst->ra--, cst->rb--, cst->rr++);
 	while (cst->rra && cst->rrb)
 		(cst->rra--, cst->rrb--, cst->rrr++);
-	if (cst->ra + cst->rb + cst->rr >= cst->rra + cst->rrb + cst->rrr)
+	if ((cst->ra + cst->rb + cst->rr) <= (cst->rra + cst->rrb + cst->rrr))
 		(cst->rra = 0, cst->rrb = 0, cst->rrr = 0);
 	else
 		(cst->ra = 0, cst->rb = 0, cst->rr = 0);
@@ -95,12 +137,15 @@ t_cost *cost_utils(t_stack *stk_a, t_stack *stk_b)
 		{
 			if (best_cst)
 				free(best_cst);
-			best_cst = cur_cst;
+			best_cst = (t_cost *)malloc(sizeof(t_cost));
+			*best_cst = *cur_cst;
 		}
 		else
 			free(cur_cst);
 		cur = cur->next;
 		i++;
 	}
-	return (best_cst)
+	// printf("bestcost\n");
+	// printf("rr = %d, rrr = %d, ra = %d, rb = %d, rra = %d, rrb = %d\n", best_cst->rr, best_cst->rrr, best_cst->ra, best_cst->rb, best_cst->rra, best_cst->rrb);
+	return (best_cst);
 }
